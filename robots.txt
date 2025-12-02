@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Disallow: /.git/
+
+Sitemap: https://bhumiksoni.github.io/sprint-planner/sitemap.xml
