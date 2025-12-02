@@ -1,9 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Primary Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sprint Planner</title>
+    <title>Sprint Planner | Free Agile Sprint Planning Tool</title>
+    <meta name="description" content="Free, simple sprint planning tool for agile teams. Plan sprints, track team capacity, calculate available points, and estimate sprint commitment. No signup required.">
+    <meta name="keywords" content="sprint planning, agile, scrum, team capacity, sprint estimation, agile planning, sprint calculator, team leaves, sprint commitment">
+    <meta name="author" content="Sprint Planner Tool">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bhumiksoni.github.io/sprint-planner/">
+    <meta property="og:title" content="Sprint Planner | Free Agile Sprint Planning Tool">
+    <meta property="og:description" content="Free, simple sprint planning tool for agile teams. Plan sprints, track team capacity, calculate available points, and estimate sprint commitment.">
+    <meta property="og:image" content="https://bhumiksoni.github.io/sprint-planner/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://bhumiksoni.github.io/sprint-planner/">
+    <meta property="twitter:title" content="Sprint Planner | Free Agile Sprint Planning Tool">
+    <meta property="twitter:description" content="Free, simple sprint planning tool for agile teams. Plan sprints, track team capacity, calculate available points, and estimate sprint commitment.">
+    <meta property="twitter:image" content="https://bhumiksoni.github.io/sprint-planner/og-image.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://bhumiksoni.github.io/sprint-planner/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Sprint Planner",
+        "description": "Free online sprint planning tool for agile teams to calculate sprint capacity and estimate commitment",
+        "url": "https://bhumiksoni.github.io/sprint-planner/",
+        "applicationCategory": "ProductivityApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "Sprint Planner Tool"
+        },
+        "datePublished": "2024-01-01",
+        "dateModified": "2024-01-01",
+        "screenshot": "https://bhumiksoni.github.io/sprint-planner/og-image.png",
+        "featureList": "Team member management, Sprint days configuration, Leaves tracking, Capacity calculation, Sprint estimation"
+    }
+    </script>
+    
     <style>
         * {
             margin: 0;
@@ -326,17 +387,39 @@
                 height: 50vh;
             }
         }
+        
+        /* Hidden content for SEO (accessible to screen readers) */
+        .seo-content {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <!-- Hidden SEO content for better accessibility and SEO -->
+    <div class="seo-content">
+        <h1>Sprint Planning Tool</h1>
+        <h2>Free Agile Sprint Planner</h2>
+        <p>This free sprint planning tool helps agile teams calculate sprint capacity, track team member availability, and estimate sprint commitment. Perfect for Scrum masters, product owners, and development teams.</p>
+        <p>Features include: team member management, leaves tracking, sprint duration configuration, commitment percentage adjustment, and real-time calculations.</p>
+        <p>Keywords: sprint planning, agile planning, scrum planning, team capacity, sprint estimation, agile tools, free sprint planner, online sprint planning, team leaves calculator, sprint commitment calculator.</p>
+    </div>
+    
+    <div class="app-container" role="main">
         <!-- Left Side - Members -->
         <div class="members-side">
             <div class="members-header">
                 <h1>Team Members</h1>
                 <div class="add-member-form">
-                    <input type="text" id="memberName" placeholder="Enter team member name">
-                    <button id="addMemberBtn">Add</button>
+                    <input type="text" id="memberName" placeholder="Enter team member name" aria-label="Team member name">
+                    <button id="addMemberBtn" aria-label="Add team member">Add</button>
                 </div>
                 <p style="margin-top: 10px; color: #64748b; font-size: 14px;">
                     Each member contributes 1 point per working day
@@ -344,13 +427,13 @@
             </div>
             
             <div class="members-list-container">
-                <table class="members-table">
+                <table class="members-table" aria-label="Team members list">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Leaves (Days)</th>
-                            <th>Available Points</th>
-                            <th></th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Leaves (Days)</th>
+                            <th scope="col">Available Points</th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="membersTable">
@@ -373,18 +456,18 @@
                     <div class="setup-grid">
                         <div class="form-group">
                             <label for="sprintDays">Sprint Days</label>
-                            <input type="number" id="sprintDays" value="10" min="1" max="30">
+                            <input type="number" id="sprintDays" value="10" min="1" max="30" aria-label="Sprint duration in days">
                         </div>
                         <div class="form-group">
                             <label for="percentage">Commitment Percentage</label>
-                            <input type="number" id="percentage" value="70" min="10" max="100">
+                            <input type="number" id="percentage" value="70" min="10" max="100" aria-label="Commitment percentage for sprint">
                         </div>
                     </div>
                 </div>
                 
                 <div class="result-card">
                     <div class="result-label">Recommended Sprint Points</div>
-                    <div class="result-value" id="sprintEstimate">0</div>
+                    <div class="result-value" id="sprintEstimate" aria-live="polite">0</div>
                     <div class="result-details" id="resultDetails">
                         Based on 0 members with 0 days off
                     </div>
@@ -405,13 +488,43 @@
                     </div>
                     
                     <div class="actions">
-                        <button id="calculateBtn" class="recalculate-btn">Recalculate</button>
-                        <button id="resetBtn" class="reset-btn">Reset All</button>
+                        <button id="calculateBtn" class="recalculate-btn" aria-label="Recalculate sprint estimate">Recalculate</button>
+                        <button id="resetBtn" class="reset-btn" aria-label="Reset all data">Reset All</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Structured Data for FAQ (optional) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "What is this sprint planning tool?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This is a free online tool for agile teams to plan sprints, track team member availability, and calculate sprint commitment based on capacity and leaves."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I use the sprint planner?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "1. Add team members by name 2. Set each member's days off (leaves) 3. Configure sprint duration and commitment percentage 4. View the recommended sprint points"
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is this tool free?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, this is a completely free tool with no signup required. All calculations happen in your browser."
+            }
+        }]
+    }
+    </script>
 
     <script>
         // Store team members
@@ -505,11 +618,12 @@
                                value="${member.leaves}" 
                                min="0" 
                                max="${sprintDays}"
-                               onchange="updateLeaves(${index}, this.value)">
+                               onchange="updateLeaves(${index}, this.value)"
+                               aria-label="Leaves for ${member.name}">
                     </td>
                     <td class="available-points">${availableDays}</td>
                     <td>
-                        <button onclick="removeMember(${index})" class="remove-btn">
+                        <button onclick="removeMember(${index})" class="remove-btn" aria-label="Remove ${member.name}">
                             Remove
                         </button>
                     </td>
@@ -581,6 +695,15 @@
         window.addEventListener('DOMContentLoaded', function() {
             updateMembersTable();
             calculateTotals();
+        });
+        
+        // Update page title dynamically for better SEO
+        document.addEventListener('DOMContentLoaded', function() {
+            const memberCount = teamMembers.length;
+            const title = memberCount > 0 
+                ? `Sprint Planner | ${memberCount} Team Members` 
+                : 'Sprint Planner | Free Agile Sprint Planning Tool';
+            document.title = title;
         });
     </script>
 </body>
