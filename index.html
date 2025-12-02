@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprint Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: #f8fafc;
+        }
+        
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* Left Side - Members */
+        .members-side {
+            flex: 1;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            min-width: 0; /* Allows proper flex behavior */
+        }
+        
+        .members-header {
+            padding: 25px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .members-header h1 {
+            color: #1e293b;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        .add-member-form {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .add-member-form input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .add-member-form input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .add-member-form button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        
+        .add-member-form button:hover {
+            background: #2563eb;
+        }
+        
+        .members-list-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 25px;
+        }
+        
+        .members-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .members-table th {
+            text-align: left;
+            padding: 15px 0;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 14px;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+        
+        .members-table td {
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .member-name {
+            font-weight: 500;
+            color: #1e293b;
+        }
+        
+        .leaves-input {
+            width: 70px;
+            padding: 8px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 16px;
+        }
+        
+        .leaves-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .available-points {
+            color: #10b981;
+            font-weight: 500;
+        }
+        
+        .remove-btn {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        
+        .remove-btn:hover {
+            background: #fecaca;
+        }
+        
+        .empty-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+        
+        /* Right Side - Setup & Results */
+        .setup-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        
+        .setup-content {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .setup-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .setup-card h2 {
+            color: #1e293b;
+            margin-bottom: 25px;
+            font-size: 20px;
+        }
+        
+        .setup-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #475569;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-radius: 12px;
+            padding: 40px;
+            color: white;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .result-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .result-value {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .result-details {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .actions button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .recalculate-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .recalculate-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .reset-btn {
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+        }
+        
+        .reset-btn:hover {
+            background: rgba(220, 38, 38, 0.9);
+        }
+        
+        /* Scrollbar styling */
+        .members-list-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .members-list-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        .members-list-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        .members-list-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .members-side {
+                height: 50vh;
+            }
+            
+            .setup-side {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Side - Members -->
+        <div class="members-side">
+            <div class="members-header">
+                <h1>Team Members</h1>
+                <div class="add-member-form">
+                    <input type="text" id="memberName" placeholder="Enter team member name">
+                    <button id="addMemberBtn">Add</button>
+                </div>
+                <p style="margin-top: 10px; color: #64748b; font-size: 14px;">
+                    Each member contributes 1 point per working day
+                </p>
+            </div>
+            
+            <div class="members-list-container">
+                <table class="members-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Leaves (Days)</th>
+                            <th>Available Points</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="membersTable">
+                        <!-- Members will be added here -->
+                    </tbody>
+                </table>
+                
+                <div id="emptyMessage" class="empty-message">
+                    <p style="font-size: 18px; margin-bottom: 10px;">No team members yet</p>
+                    <p>Add your first team member above</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Side - Setup & Results -->
+        <div class="setup-side">
+            <div class="setup-content">
+                <div class="setup-card">
+                    <h2>Sprint Settings</h2>
+                    <div class="setup-grid">
+                        <div class="form-group">
+                            <label for="sprintDays">Sprint Days</label>
+                            <input type="number" id="sprintDays" value="10" min="1" max="30">
+                        </div>
+                        <div class="form-group">
+                            <label for="percentage">Commitment Percentage</label>
+                            <input type="number" id="percentage" value="70" min="10" max="100">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-label">Recommended Sprint Points</div>
+                    <div class="result-value" id="sprintEstimate">0</div>
+                    <div class="result-details" id="resultDetails">
+                        Based on 0 members with 0 days off
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalMembers">0</div>
+                            <div class="stat-label">Team Members</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalCapacity">0</div>
+                            <div class="stat-label">Available Points</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="commitmentPercent">70%</div>
+                            <div class="stat-label">Commitment</div>
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button id="calculateBtn" class="recalculate-btn">Recalculate</button>
+                        <button id="resetBtn" class="reset-btn">Reset All</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store team members
+        let teamMembers = [];
+        
+        // Get DOM elements
+        const memberNameInput = document.getElementById('memberName');
+        const addMemberBtn = document.getElementById('addMemberBtn');
+        const sprintDaysInput = document.getElementById('sprintDays');
+        const percentageInput = document.getElementById('percentage');
+        const membersTable = document.getElementById('membersTable');
+        const emptyMessage = document.getElementById('emptyMessage');
+        const sprintEstimateEl = document.getElementById('sprintEstimate');
+        const resultDetailsEl = document.getElementById('resultDetails');
+        const totalMembersEl = document.getElementById('totalMembers');
+        const totalCapacityEl = document.getElementById('totalCapacity');
+        const commitmentPercentEl = document.getElementById('commitmentPercent');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        
+        // Add a new team member
+        function addMember() {
+            const name = memberNameInput.value.trim();
+            
+            // Validate input
+            if (!name) {
+                alert("Please enter a name");
+                memberNameInput.focus();
+                return;
+            }
+            
+            // Add to team members array
+            teamMembers.push({
+                name: name,
+                leaves: 0
+            });
+            
+            // Clear input and focus
+            memberNameInput.value = '';
+            memberNameInput.focus();
+            
+            // Update UI
+            updateMembersTable();
+            calculateTotals();
+        }
+        
+        // Update leaves for a team member
+        function updateLeaves(index, newLeaves) {
+            const sprintDays = parseInt(sprintDaysInput.value);
+            
+            if (isNaN(newLeaves) || newLeaves < 0 || newLeaves > sprintDays) {
+                alert(`Leaves must be between 0 and ${sprintDays} days`);
+                return;
+            }
+            
+            teamMembers[index].leaves = parseInt(newLeaves);
+            calculateTotals();
+        }
+        
+        // Remove a team member
+        function removeMember(index) {
+            teamMembers.splice(index, 1);
+            updateMembersTable();
+            calculateTotals();
+        }
+        
+        // Update the members table
+        function updateMembersTable() {
+            const sprintDays = parseInt(sprintDaysInput.value);
+            
+            // Clear table
+            membersTable.innerHTML = '';
+            
+            if (teamMembers.length === 0) {
+                emptyMessage.style.display = 'block';
+                return;
+            }
+            
+            emptyMessage.style.display = 'none';
+            
+            // Add each member to the table
+            teamMembers.forEach((member, index) => {
+                const availableDays = sprintDays - member.leaves;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="member-name">${member.name}</td>
+                    <td>
+                        <input type="number" 
+                               class="leaves-input" 
+                               value="${member.leaves}" 
+                               min="0" 
+                               max="${sprintDays}"
+                               onchange="updateLeaves(${index}, this.value)">
+                    </td>
+                    <td class="available-points">${availableDays}</td>
+                    <td>
+                        <button onclick="removeMember(${index})" class="remove-btn">
+                            Remove
+                        </button>
+                    </td>
+                `;
+                
+                membersTable.appendChild(row);
+            });
+        }
+        
+        // Calculate totals
+        function calculateTotals() {
+            const sprintDays = parseInt(sprintDaysInput.value);
+            const percentage = parseInt(percentageInput.value);
+            
+            // Calculate total capacity and leaves
+            let totalLeaves = 0;
+            
+            teamMembers.forEach(member => {
+                totalLeaves += member.leaves;
+            });
+            
+            const totalCapacity = teamMembers.length * sprintDays;
+            const availableCapacity = totalCapacity - totalLeaves;
+            const sprintEstimate = Math.round(availableCapacity * (percentage / 100));
+            
+            // Update UI
+            sprintEstimateEl.textContent = sprintEstimate;
+            resultDetailsEl.textContent = `Based on ${teamMembers.length} members with ${totalLeaves} days off`;
+            totalMembersEl.textContent = teamMembers.length;
+            totalCapacityEl.textContent = availableCapacity;
+            commitmentPercentEl.textContent = `${percentage}%`;
+            
+            // Update members table to reflect new sprint days
+            updateMembersTable();
+        }
+        
+        // Reset all data
+        function resetAll() {
+            if (confirm("Reset all data? This will remove all team members.")) {
+                teamMembers = [];
+                memberNameInput.value = '';
+                sprintDaysInput.value = '10';
+                percentageInput.value = '70';
+                
+                updateMembersTable();
+                calculateTotals();
+                memberNameInput.focus();
+            }
+        }
+        
+        // Event listeners
+        addMemberBtn.addEventListener('click', addMember);
+        
+        // Allow Enter key to add member
+        memberNameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addMember();
+            }
+        });
+        
+        // Update when settings change
+        sprintDaysInput.addEventListener('change', calculateTotals);
+        percentageInput.addEventListener('change', calculateTotals);
+        
+        calculateBtn.addEventListener('click', calculateTotals);
+        resetBtn.addEventListener('click', resetAll);
+        
+        // Initialize the app
+        window.addEventListener('DOMContentLoaded', function() {
+            updateMembersTable();
+            calculateTotals();
+        });
+    </script>
+</body>
+</html>
